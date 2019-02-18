@@ -69,6 +69,11 @@ const resolvers = {
         }
       });
     }
+  },
+  User: {
+    username: user => {
+      return user.username;
+    }
   }
 };
 
