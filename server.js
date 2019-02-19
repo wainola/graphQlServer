@@ -5,7 +5,7 @@ const cors = require('cors');
 const app = express();
 app.use(cors());
 
-let users = {
+const users = {
   1: {
     id: '1',
     username: 'Nicolas Riquelme'
@@ -16,7 +16,16 @@ let users = {
   }
 };
 
-const me = users[1];
+const messages = {
+  1: {
+    id: '1',
+    text: 'Hello world'
+  },
+  2: {
+    id: '2',
+    text: 'Poto caca'
+  }
+};
 
 const schema = gql`
   type Query {
@@ -25,21 +34,22 @@ const schema = gql`
     users: [User!]
     animal: Animal
     animals: [Animal!]
+    messages: [Message!]
+    message(id: ID!): Message!
   }
   type User {
     id: ID!
     username: String!
   }
-  type Animal {
-    type: String!
-    name: String!
-    age: Int!
+  type Message {
+    id: ID!
+    text: String!
   }
 `;
 
 const resolvers = {
   Query: {
-    me: () => {
+    me: (parent, args, { me }) => {
       return me;
     },
     user: (parent, { id }) => {
@@ -47,27 +57,6 @@ const resolvers = {
     },
     users: () => {
       return Object.values(users);
-    },
-    animal: () => {
-      return {
-        type: 'Mammal',
-        name: 'Bruno',
-        age: 7
-      };
-    },
-    animals: () => {
-      return Object.values({
-        1: {
-          type: 'Mammal',
-          name: 'Kat',
-          age: 1
-        },
-        2: {
-          type: 'Bird',
-          name: 'Birdman',
-          age: 13
-        }
-      });
     }
   },
   User: {
@@ -79,7 +68,10 @@ const resolvers = {
 
 const server = new ApolloServer({
   typeDefs: schema,
-  resolvers
+  resolvers,
+  context: {
+    me: users[1]
+  }
 });
 
 server.applyMiddleware({ app, path: '/graphql' });
