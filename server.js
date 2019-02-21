@@ -1,6 +1,7 @@
 const express = require('express');
 const { ApolloServer, gql } = require('apollo-server-express');
 const cors = require('cors');
+const { v4 } = require('uuid');
 
 const { accounts, creditCards } = require('./accounts');
 
@@ -45,6 +46,9 @@ const schema = gql`
     creditCard(id: ID!): CreditCard!
     creditCards: [CreditCard!]
     client(id: ID!): Client!
+  }
+  type Mutation {
+    createMessage(text: String!): Message!
   }
   type User {
     id: ID!
@@ -101,6 +105,20 @@ const resolvers = {
     },
     creditCards: () => {
       return Object.values(creditCards);
+    }
+  },
+  Mutation: {
+    createMessage: (parent, { text }, { me }) => {
+      const id = v4();
+      const message = {
+        id,
+        text,
+        userId: me.id
+      };
+
+      messages[id] = message;
+      users[me.id].messageId.push(id);
+      return message;
     }
   },
   User: {
