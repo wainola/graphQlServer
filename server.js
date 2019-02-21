@@ -64,6 +64,7 @@ const schema = gql`
     id: ID!
     name: String!
     balance: Int!
+    creditCard: [CreditCard!]
   }
   type CreditCard {
     id: ID!
@@ -93,6 +94,7 @@ const resolvers = {
       return messages[id];
     },
     account: (parent, { id }) => {
+      console.log('account');
       return accounts[id];
     },
     accounts: () => {
@@ -111,7 +113,10 @@ const resolvers = {
       return user.username;
     },
     messages: user => {
-      console.log('USER::Messages');
+      console.log(
+        'USER::Messages',
+        Object.values(messages).filter(message => message.userId === user.id)
+      );
       return Object.values(messages).filter(message => message.userId === user.id);
     }
   },
@@ -119,6 +124,16 @@ const resolvers = {
     user: message => {
       console.log('messages and users', users[message.userId]);
       return users[message.userId];
+    }
+  },
+  Account: {
+    creditCard: account => {
+      console.log(
+        'Account::CreditCard',
+        Object.values(creditCards).filter(card => card.id === account.id)[0].id,
+        account.id
+      );
+      return Object.values(creditCards).filter(card => card.id === account.id);
     }
   }
 };
