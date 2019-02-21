@@ -2,6 +2,8 @@ const express = require('express');
 const { ApolloServer, gql } = require('apollo-server-express');
 const cors = require('cors');
 
+const { accounts, creditCards } = require('./accounts');
+
 const app = express();
 app.use(cors());
 
@@ -38,6 +40,11 @@ const schema = gql`
     users: [User!]
     messages: [Message!]
     message(id: ID!): Message!
+    account(id: ID!): Account!
+    accounts: [Account!]
+    creditCard(id: ID!): CreditCard!
+    creditCards: [CreditCard!]
+    client(id: ID!): Client!
   }
   type User {
     id: ID!
@@ -48,6 +55,20 @@ const schema = gql`
     id: ID!
     text: String!
     user: User!
+  }
+  type Client {
+    account: Account!
+    credit: CreditCard!
+  }
+  type Account {
+    id: ID!
+    name: String!
+    balance: Int!
+  }
+  type CreditCard {
+    id: ID!
+    cod: String!
+    international: Boolean!
   }
 `;
 
@@ -70,13 +91,27 @@ const resolvers = {
     message: (parent, { id }) => {
       console.log('message', id);
       return messages[id];
+    },
+    account: (parent, { id }) => {
+      return accounts[id];
+    },
+    accounts: () => {
+      return Object.values(accounts);
+    },
+    creditCard: (parent, { id }) => {
+      return creditCards[id];
+    },
+    creditCards: () => {
+      return Object.values(creditCards);
     }
   },
   User: {
     username: user => {
+      console.log('USER::Username');
       return user.username;
     },
     messages: user => {
+      console.log('USER::Messages');
       return Object.values(messages).filter(message => message.userId === user.id);
     }
   },
