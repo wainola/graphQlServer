@@ -79,22 +79,18 @@ const resolvers = {
       return me;
     },
     user: (parent, { id }) => {
-      console.log('user');
       return users[id];
     },
     users: () => {
-      console.log('users');
       return Object.values(users);
     },
     messages: () => {
       return Object.values(messages);
     },
     message: (parent, { id }) => {
-      console.log('message', id);
       return messages[id];
     },
     account: (parent, { id }) => {
-      console.log('account');
       return accounts[id];
     },
     accounts: () => {
@@ -109,30 +105,19 @@ const resolvers = {
   },
   User: {
     username: user => {
-      console.log('USER::Username');
       return user.username;
     },
     messages: user => {
-      console.log(
-        'USER::Messages',
-        Object.values(messages).filter(message => message.userId === user.id)
-      );
       return Object.values(messages).filter(message => message.userId === user.id);
     }
   },
   Message: {
     user: message => {
-      console.log('messages and users', users[message.userId]);
       return users[message.userId];
     }
   },
   Account: {
     creditCard: account => {
-      console.log(
-        'Account::CreditCard',
-        Object.values(creditCards).filter(card => card.id === account.id)[0].id,
-        account.id
-      );
       return Object.values(creditCards).filter(card => card.id === account.id);
     }
   }
