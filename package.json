@@ -11,7 +11,7 @@
     "bash": "docker exec -it graphql_server bash",
     "test": "jest --watchAll",
     "logs": "docker-compose logs f",
-    "db": "docker exec -it graphqlserver_postgres_1 psq -U postgres -d graphqlDB",
+    "db": "docker exec -it graphqlserver_postgres_1 psql -U postgres -d graphql_db",
     "migrations": "nodemon ./postgres/index.js"
   },
   "keywords": [],

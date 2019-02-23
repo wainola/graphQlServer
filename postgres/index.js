@@ -8,35 +8,37 @@ const conn = new Client({
 conn.connect();
 
 const pgCryptoExtension = `
-CREATE EXTENSION IF NO EXISTS "pgcrypto";
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
 `;
 
 const userTable = `
-CREATE TABLE user (
-    id UUID PRIMARY KEY gen_random_uuid(),
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     username TEXT NOT NULL
 );
 `;
 
 const messageTable = `
-CREATE TABLE messag (
-    id UUID PRIMARY KEY gen_random_uuid(),
-    text TEXT NOT NULL
-    user_id UUID NOT NULL REFERENCES user(id)
+CREATE TABLE message (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    text TEXT NOT NULL,
+    user_id UUID NOT NULL REFERENCES users(id)
 );
 `;
 
 const queries = [pgCryptoExtension, userTable, messageTable];
 
-Promise.all(queries.map(async q => {
-    
+Promise.all(
+  queries.map(async q => {
     try {
-        
+      const r = await conn.query(q);
+      const result = await r;
+      console.log('result:', result);
+    } catch (e) {
+      console.log('error:', e);
     }
-    const r = await conn.query(q)
-    const result = await r
-
-}))
+  })
+);
 
 console.log('connection', process.env.DATABASE_URL);
 
