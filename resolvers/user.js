@@ -29,11 +29,9 @@ module.exports = {
   },
   User: {
     messages: async parent => {
-      console.log('parent::', parent);
       const query = `SELECT * FROM message WHERE user_id = '${parent.id}'`;
       const q = await conn.query(query);
       const results = await q.rows;
-      console.log('results', results);
       return results;
     }
   }
