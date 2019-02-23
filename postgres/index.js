@@ -28,7 +28,15 @@ CREATE TABLE messag (
 
 const queries = [pgCryptoExtension, userTable, messageTable];
 
-// Promise.all(queries.map(q => ))
+Promise.all(queries.map(async q => {
+    
+    try {
+        
+    }
+    const r = await conn.query(q)
+    const result = await r
+
+}))
 
 console.log('connection', process.env.DATABASE_URL);
 
