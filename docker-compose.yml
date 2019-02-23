@@ -1,0 +1,23 @@
+version: "3"
+services:
+  postgres:
+    image: postgres
+    environment:
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=graphql_db
+  graphql_server:
+    container_name: graphql_server
+    depends_on:
+      - postgres
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    command: 'npm run dev'
+    ports:
+      - '9001:9001'
+    volumes:
+      - ./:/usr/server
+    environment:
+      - DATABASE_URL=postgres://postgres:password@postgres/graphql_db

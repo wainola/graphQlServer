@@ -4,8 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "up": "docker-compose up -d",
+    "d-build": "docker-compose build",
+    "down": "docker-compose down",
+    "bash": "docker exec -it nominator bash",
+    "test": "jest --watchAll",
+    "logs": "docker-compose logs f",
+    "db": "docker exec -it postgres psq -U postgres -d graphqlDB"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +33,7 @@
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "graphql": "^14.1.1",
+    "pg": "^7.8.1",
     "uuid": "^3.3.2"
   }
 }
