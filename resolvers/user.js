@@ -1,13 +1,30 @@
+require('dotenv').config();
+const { Client } = require('pg');
+
+const { DATABASE_URL } = process.env;
+
+const conn = new Client({
+  connectionString: DATABASE_URL
+});
+
+conn
+  .connect()
+  .then(() => console.log('connected to the database'))
+  .catch(e => console.log('error on connecting to the database', e));
+
 module.exports = {
   Query: {
-    me: (parent, args, { me }) => {
-      return me;
+    user: async (parent, { id }) => {
+      const query = `SELECT * FROM users WHERE id = '${id}';`;
+      const q = await conn.query(query);
+      const results = await q.rows[0];
+      return results;
     },
-    user: (parent, { id }, { models }) => {
-      return models.users[id];
-    },
-    users: (parent, args, { models }) => {
-      return Object.values(models.users);
+    users: async () => {
+      const query = 'SELECT * FROM users;';
+      const q = await conn.query(query);
+      const results = await q.rows;
+      return results;
     }
   },
   User: {
