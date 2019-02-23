@@ -1,16 +1,7 @@
 const { v4 } = require('uuid');
 
-const resolvers = {
+module.exports = {
   Query: {
-    me: (parent, args, { me }) => {
-      return me;
-    },
-    user: (parent, { id }, { models }) => {
-      return models.users[id];
-    },
-    users: (parent, args, { models }) => {
-      return Object.values(models.users);
-    },
     messages: (parent, args, { models }) => {
       return Object.values(models.messages);
     },
@@ -41,19 +32,9 @@ const resolvers = {
       return true;
     }
   },
-  User: {
-    username: user => {
-      return user.username;
-    },
-    messages: (user, args, { models }) => {
-      return Object.values(models.messages).filter(message => message.userId === user.id);
-    }
-  },
   Message: {
     user: (message, args, { models }) => {
       return models.users[message.userId];
     }
   }
 };
-
-module.exports = resolvers;
