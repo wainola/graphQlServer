@@ -1,12 +1,28 @@
+require('dotenv').config();
 const { v4 } = require('uuid');
+const { Client } = require('pg');
+
+const { DATABASE_URL } = process.env;
+
+const conn = new Client({
+  connectionString: DATABASE_URL
+});
+
+conn.connect();
 
 module.exports = {
   Query: {
-    messages: (parent, args, { models }) => {
-      return Object.values(models.messages);
+    messages: async () => {
+      const query = 'SELECT * FROM message;';
+      const q = await conn.query(query);
+      const results = await q.rows;
+      return results;
     },
-    message: (parent, { id }, { models }) => {
-      return models.messages[id];
+    message: async (parent, { id }) => {
+      const query = `SELECT * FROM message WHERE id = '${id}';`;
+      const q = await conn.query(query);
+      const results = await q.rows[0];
+      return results;
     }
   },
   Mutation: {
