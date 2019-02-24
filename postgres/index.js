@@ -28,24 +28,20 @@ CREATE TABLE message (
 
 const queries = [pgCryptoExtension, userTable, messageTable];
 
-Promise.all(
-  queries.map(async q => {
-    try {
-      const r = await conn.query(q);
-      const result = await r;
-      console.log('result:', result);
-    } catch (e) {
-      console.log('error:', e);
-    }
-  })
-);
+const resolveTables = queries =>
+  Promise.all(
+    queries.map(async q => {
+      try {
+        const r = await conn.query(q);
+        const result = await r;
+        console.log('success on creating table!');
+      } catch (e) {
+        console.log('error:', e);
+      }
+    })
+  );
 
-console.log('connection', process.env.DATABASE_URL);
-
-conn.query('SELECT NOW()', (err, result) => {
-  if (err) console.log('error', err);
-  console.log('rows');
-  console.log(result.rows);
-});
-
-console.log('end connection');
+resolveTables(queries)
+  .then(() => console.log('Success on running migrations'))
+  .then(() => process.exit())
+  .catch(e => console.log('Some error hapened', e));
