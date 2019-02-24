@@ -35,14 +35,15 @@ module.exports = {
       const results = await q.rows[0];
       return results;
     },
-    deleteMessage: (parend, { id }, { models }) => {
-      const { [id]: message, ...otherMessages } = models.messages;
-
-      if (!message) return false;
-
-      models.messages = otherMessages;
-
-      return true;
+    deleteMessage: async (parend, { id }) => {
+      const query = `DELETE FROM message WHERE id = '${id}' RETURNING *;`;
+      const q = await conn.query(query);
+      const results = await q.rows;
+      console.log('results', results);
+      if (results.length) {
+        return true;
+      }
+      return false;
     }
   },
   Message: {
