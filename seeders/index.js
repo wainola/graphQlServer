@@ -26,7 +26,6 @@ Promise.all(
       const dataToInsert = [messages[i].text, user_id];
       conn.query(queryMessages, dataToInsert).then(data => {
         console.log('SUCCESS ON INSERTING MESSAGE', data);
-        process.exit();
       });
     }
   })
