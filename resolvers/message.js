@@ -48,8 +48,10 @@ module.exports = {
   },
   Message: {
     user: async parent => {
-      console.log('parent', parent);
-      return {};
+      const query = `SELECT * FROM users WHERE id = '${parent.user_id}';`;
+      const q = await conn.query(query);
+      const results = await q.rows[0];
+      return results;
     }
   }
 };
