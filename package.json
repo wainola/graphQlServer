@@ -12,7 +12,8 @@
     "test": "jest --watchAll",
     "logs": "docker-compose logs f",
     "db": "docker exec -it graphqlserver_postgres_1 psql -U postgres -d graphql_db",
-    "migrations": "nodemon ./postgres/index.js"
+    "migrations": "node ./postgres/index.js",
+    "seed": "node ./seeders/index.js"
   },
   "keywords": [],
   "author": "",

@@ -1,12 +1,5 @@
 version: "3"
 services:
-  postgres:
-    image: postgres
-    environment:
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=graphql_db
   graphql_server:
     container_name: graphql_server
     depends_on:
@@ -21,3 +14,11 @@ services:
       - ./:/usr/server
     environment:
       - DATABASE_URL=postgres://postgres:password@postgres/graphql_db
+  
+  postgres:
+    image: postgres
+    environment:
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=graphql_db
