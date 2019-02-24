@@ -44,7 +44,6 @@ const resolveMessages = data =>
         const u1 = results.filter(item => item.username === 'wainola')[0];
         const u2 = results.filter(item => item.username === 'nrriquel')[0];
         const u3 = results.filter(item => item.username === 'queen')[0];
-        // console.log('USERS:::', u1, u2, u3);
 
         if (idx < 2) {
           item.user_id = u1.id;
