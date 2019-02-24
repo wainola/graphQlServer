@@ -26,17 +26,14 @@ module.exports = {
     }
   },
   Mutation: {
-    createMessage: (parent, { text }, { me, models }) => {
-      const id = v4();
-      const message = {
-        id,
-        text,
-        userId: me.id
-      };
-
-      models.messages[id] = message;
-      models.users[me.id].messageId.push(id);
-      return message;
+    createMessage: async (parent, { text, userId }) => {
+      const query = `
+      INSERT INTO MESSAGE (text, user_id) VALUES ($1, $2) RETURNING *;
+      `;
+      const valuesToInsert = [text, userId];
+      const q = await conn.query(query, valuesToInsert);
+      const results = await q.rows[0];
+      return results;
     },
     deleteMessage: (parend, { id }, { models }) => {
       const { [id]: message, ...otherMessages } = models.messages;
