@@ -27,6 +27,15 @@ module.exports = {
       return results;
     }
   },
+  Mutation: {
+    createUser: async (parent, { username }) => {
+      const query = `INSERT INTO users (username) VALUES ($1) RETURNING *;`;
+      const valuesToInsert = [username];
+      const q = await conn.query(query, valuesToInsert);
+      const results = await q.rows[0];
+      return results;
+    }
+  },
   User: {
     messages: async parent => {
       const query = `SELECT * FROM message WHERE user_id = '${parent.id}'`;

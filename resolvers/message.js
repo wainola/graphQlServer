@@ -47,8 +47,9 @@ module.exports = {
     }
   },
   Message: {
-    user: (message, args, { models }) => {
-      return models.users[message.userId];
+    user: async parent => {
+      console.log('parent', parent);
+      return {};
     }
   }
 };
