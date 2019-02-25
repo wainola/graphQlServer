@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import Home from './Home';
 import Users from './Users';
 import Messages from './Messages';
+import ErrorComponent from './Error';
+import Navigation from './Navigation';
 class App extends Component {
   componentDidMount() {
     fetch('http://localhost:9001/test')
@@ -13,24 +15,19 @@ class App extends Component {
   }
   render() {
     return (
-      <Router>
-        <div>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/users">Users</Link>
-            </li>
-            <li>
-              <Link to="/messages">Messages</Link>
-            </li>
-          </ul>
-          <Route exact path="/" component={Home} />
-          <Route path="/users" component={Users} />
-          <Route path="/messages" component={Messages} />
-        </div>
-      </Router>
+      <React.Fragment>
+        <Router>
+          <React.Fragment>
+            <Navigation />
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route path="/users" component={Users} />
+              <Route path="/messages" component={Messages} />
+              <Route component={ErrorComponent} />
+            </Switch>
+          </React.Fragment>
+        </Router>
+      </React.Fragment>
     );
   }
 }
